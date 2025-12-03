@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: Airport
+  datasource:
+    url: jdbc:sqlserver://localhost:1433;database=${MSSQL_DB};trustServerCertificate=true
+    username: "${MSSQL_USER}"
+    password: "${MSSQL_PASSWORD}"
