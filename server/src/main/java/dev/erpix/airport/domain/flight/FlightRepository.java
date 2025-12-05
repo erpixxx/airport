@@ -8,53 +8,90 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.OffsetDateTime;
-import java.util.List;
 
 @Repository
 public interface FlightRepository extends JpaRepository<Flight, Integer> {
 
-    @Query("SELECT f FROM Flight f " +
-            // Pobieramy detale głównego lotu
-            "JOIN FETCH f.airline " +
-            "JOIN FETCH f.plane " +
-            "JOIN FETCH f.departureAirport da " +
-            "JOIN FETCH f.arrivalAirport " +
+    @Query(
+            value = "SELECT f FROM Flight f " +
+                    "JOIN FETCH f.airline " +
+                    "JOIN FETCH f.plane " +
+                    "JOIN FETCH f.departureAirport da " +
+                    "JOIN FETCH f.arrivalAirport aa " + // Dodano alias 'aa' dla czytelności
+                    "LEFT JOIN FETCH f.departureGate " +
+                    "LEFT JOIN FETCH f.arrivalGate " +
 
-            // Pobieramy pierwszą przesiadkę (LEFT JOIN, bo może jej nie być)
-            "LEFT JOIN FETCH f.connectingFlight cf " +
-            "LEFT JOIN FETCH cf.airline " +
-            "LEFT JOIN FETCH cf.plane " +
-            "LEFT JOIN FETCH cf.departureAirport " +
-            "LEFT JOIN FETCH cf.arrivalAirport " +
+                    "LEFT JOIN FETCH f.connectingFlight cf1 " +
+                    "LEFT JOIN FETCH cf1.airline " +
+                    "LEFT JOIN FETCH cf1.plane " +
+                    "LEFT JOIN FETCH cf1.departureAirport " +
+                    "LEFT JOIN FETCH cf1.arrivalAirport cf1_aa " + // Alias dla przylotu 1. przesiadki
+                    "LEFT JOIN FETCH cf1.departureGate " +
+                    "LEFT JOIN FETCH cf1.arrivalGate " +
 
-            // Pobieramy drugą przesiadkę (dla tras 3-odcinkowych)
-            "LEFT JOIN FETCH cf.connectingFlight cf2 " +
-            "LEFT JOIN FETCH cf2.airline " +
-            "LEFT JOIN FETCH cf2.plane " +
-            "LEFT JOIN FETCH cf2.departureAirport " +
-            "LEFT JOIN FETCH cf2.arrivalAirport " +
+                    "LEFT JOIN FETCH cf1.connectingFlight cf2 " +
+                    "LEFT JOIN FETCH cf2.airline " +
+                    "LEFT JOIN FETCH cf2.plane " +
+                    "LEFT JOIN FETCH cf2.departureAirport " +
+                    "LEFT JOIN FETCH cf2.arrivalAirport cf2_aa " + // Alias dla przylotu 2. przesiadki
 
-            // Warunki wyszukiwania
-            "WHERE da.code = :fromCode " +
-            "AND f.departure BETWEEN :start AND :end")
-    List<Flight> findFlightsByRoute(
-            @Param("fromCode") String fromCode,
-            @Param("start") OffsetDateTime start,
-            @Param("end") OffsetDateTime end
+                    "WHERE da.code = :from " +
+                    "AND f.departure > :now " +
+                    "AND (" +
+                    "   aa.code = :to " +
+                    "   OR cf1_aa.code = :to " +
+                    "   OR cf2_aa.code = :to " +
+                    ")",
+
+            countQuery = "SELECT count(f) FROM Flight f " +
+                    "JOIN f.departureAirport da " +
+                    "JOIN f.arrivalAirport aa " +
+                    "LEFT JOIN f.connectingFlight cf1 " +
+                    "LEFT JOIN cf1.arrivalAirport cf1_aa " +
+                    "LEFT JOIN cf1.connectingFlight cf2 " +
+                    "LEFT JOIN cf2.arrivalAirport cf2_aa " +
+                    "WHERE da.code = :from " +
+                    "AND f.departure > :now " +
+                    "AND (aa.code = :to OR cf1_aa.code = :to OR cf2_aa.code = :to)"
+    )
+    Page<Flight> findFlightsFromTo(
+            @Param("from") String fromCode,
+            @Param("to") String toCode,
+            @Param("now") OffsetDateTime now,
+            Pageable pageable
     );
 
     @Query(
             value = "SELECT f FROM Flight f " +
                     "JOIN FETCH f.airline " +
                     "JOIN FETCH f.plane " +
-                    "JOIN FETCH f.departureAirport " +
+                    "JOIN FETCH f.departureAirport da " +
                     "JOIN FETCH f.arrivalAirport " +
-                    "LEFT JOIN FETCH f.departureGate " + // LEFT, bo bramka może być null
+                    "LEFT JOIN FETCH f.departureGate " +
                     "LEFT JOIN FETCH f.arrivalGate " +
-                    "WHERE f.departure > :now",
-            countQuery = "SELECT count(f) FROM Flight f WHERE f.departure > :now"
+
+                    "LEFT JOIN FETCH f.connectingFlight cf1 " +
+                    "LEFT JOIN FETCH cf1.airline " +
+                    "LEFT JOIN FETCH cf1.plane " +
+                    "LEFT JOIN FETCH cf1.departureAirport " +
+                    "LEFT JOIN FETCH cf1.arrivalAirport " +
+                    "LEFT JOIN FETCH cf1.departureGate " +
+                    "LEFT JOIN FETCH cf1.arrivalGate " +
+
+                    "LEFT JOIN FETCH cf1.connectingFlight cf2 " +
+                    "LEFT JOIN FETCH cf2.airline " +
+                    "LEFT JOIN FETCH cf2.plane " +
+                    "LEFT JOIN FETCH cf2.departureAirport " +
+                    "LEFT JOIN FETCH cf2.arrivalAirport " +
+
+                    "WHERE da.code = :from " +
+                    "AND f.departure > :now ",
+            countQuery = "SELECT count(f) FROM Flight f " +
+                    "JOIN f.departureAirport da " +
+                    "WHERE da.code = :from AND f.departure > :now"
     )
     Page<Flight> findUpcomingFlights(
+            @Param("from") String fromCode,
             @Param("now") OffsetDateTime now,
             Pageable pageable
     );

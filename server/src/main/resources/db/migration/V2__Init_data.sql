@@ -34,6 +34,7 @@ GO
 --
 INSERT INTO [airports] ([code], [name], [country], [city])
 VALUES
+    ('BZG', N'Port Lotniczy Bydgoszcz', N'Polska', N'Bydgoszcz'),
     ('WAW', N'Lotnisko Chopina w Warszawie', N'Polska', N'Warszawa'),
     ('KRK', N'Międzynarodowy Port Lotniczy im. Jana Pawła II', N'Polska', N'Kraków'),
     ('GDN', N'Port Lotniczy Gdańsk im. Lecha Wałęsy', N'Polska', N'Gdańsk'),
@@ -252,86 +253,92 @@ GO
 
 
 -- ==========================================
--- KROK 1: Wstawianie lotów (Start: 05.12.2025 19:00)
+-- Loty bezpośrednie z Bydgoszczy
 -- ==========================================
-
 INSERT INTO [flights]
 ([airline_id], [plane_id], [departure_airport_id], [arrival_airport_id], [departure_gate_id], [arrival_gate_id], [number], [departure], [arrival])
 SELECT
     al.id, pl.id, dep.id, arr.id, dep_g.id, arr_g.id, f.num, f.dep_t, f.arr_t
 FROM
     (VALUES
-         -- == GRUPA 0: PIERWSZE LOTY DOLOTOWE (FEEDERY) - START 19:00 ==
+        ('LO', 'SP-LND', 'BZG', 'WAW', 'LO3991', '2025-12-05T06:00:00+01:00', '2025-12-05T06:50:00+01:00'),
 
-         -- 1. LOT: Gdańsk (GDN) -> Warszawa (WAW) | START SIATKI
-         -- Idealny dolot na wieczorny wylot do USA
-         ('LO', 'SP-LVD', 'GDN', 'WAW', 'LO 3836', '2025-12-05 19:00:00 +01:00', '2025-12-05 20:00:00 +01:00'),
+        ('LH', 'D-AINZ', 'BZG', 'FRA', 'LH1383', '2025-12-05T10:00:00+01:00', '2025-12-05T11:45:00+01:00'),
 
-         -- 2. LOT: Kraków (KRK) -> Warszawa (WAW)
-         ('LO', 'SP-LND', 'KRK', 'WAW', 'LO 3904', '2025-12-05 19:30:00 +01:00', '2025-12-05 20:25:00 +01:00'),
+        ('FR', 'SP-RSQ', 'BZG', 'LHR', 'FR2468', '2025-12-05T14:00:00+01:00', '2025-12-05T16:15:00+01:00'),
 
+        ('W6', 'HA-LPJ', 'BZG', 'FCO', 'W61155', '2025-12-05T11:30:00+01:00', '2025-12-05T13:45:00+01:00'),
 
-         -- == GRUPA 1: GŁÓWNE LOTY MIĘDZYKONTYNENTALNE (Wyloty po 22:00 tego samego dnia lub później) ==
+        ('LO', 'SP-LMA', 'BZG', 'KRK', 'LO3501', '2025-12-05T12:45:00+01:00', '2025-12-05T13:40:00+01:00'),
 
-         -- 3. LOT: Warszawa (WAW) -> Nowy Jork (JFK) | Dreamliner
-         -- Wylot 22:45, pasażerowie z Gdańska (przylot 20:00) mają 2h 45min na przesiadkę.
-         ('LO', 'SP-LSC', 'WAW', 'JFK', 'LO 26', '2025-12-05 22:45:00 +01:00', '2025-12-06 02:15:00 -05:00'),
+        ('KL', 'PH-BVA', 'BZG', 'AMS', 'KL1992', '2025-12-05T15:20:00+01:00', '2025-12-05T17:00:00+01:00'),
 
-         -- 4. Emirates: Dubaj (DXB) -> Singapur (SIN)
-         ('EK', 'A6-EEO', 'DXB', 'SIN', 'EK 354', '2025-12-07 03:15:00 +04:00', '2025-12-07 15:00:00 +08:00'),
+        ('FR', 'SP-RZA', 'BZG', 'GDN', 'FR7070', '2025-12-05T16:00:00+01:00', '2025-12-05T16:40:00+01:00'),
 
-         -- 5. Lufthansa: Frankfurt (FRA) -> Chicago (ORD)
-         ('LH', 'D-ABYA', 'FRA', 'ORD', 'LH 430', '2025-12-08 10:45:00 +01:00', '2025-12-08 13:10:00 -05:00'),
+        ('W6', 'HA-LVC', 'BZG', 'CDG', 'W62234', '2025-12-05T17:15:00+01:00', '2025-12-05T19:25:00+01:00'),
 
-         -- 6. British Airways: Londyn (LHR) -> Los Angeles (LAX)
-         ('BA', 'G-VIIA', 'LHR', 'LAX', 'BA 269', '2025-12-10 16:15:00 +00:00', '2025-12-10 19:25:00 -08:00'), -- Zima: UK +0, LA -8
+        ('LO', 'SP-LVD', 'BZG', 'WAW', 'LO3995', '2025-12-05T18:50:00+01:00', '2025-12-05T19:40:00+01:00'),
 
-         -- 7. Singapore Airlines: Singapur (SIN) -> Narita (NRT)
-         ('SQ', '9V-SGB', 'SIN', 'NRT', 'SQ 638', '2025-12-07 23:55:00 +08:00', '2025-12-08 08:00:00 +09:00'),
+        ('LH', 'D-AINZ', 'BZG', 'FRA', 'LH1385', '2025-12-05T19:30:00+01:00', '2025-12-05T21:15:00+01:00'),
 
+        ('FR', 'SP-RSQ', 'BZG', 'LHR', 'FR2470', '2025-12-05T20:45:00+01:00', '2025-12-05T22:00:00+01:00'),
 
-         -- == GRUPA 2: INNE LOTY DOLOTOWE (Dla przesiadek w późniejszych dniach) ==
+        ('EK', 'A6-EGV', 'BZG', 'DXB', 'EK9999', '2025-12-06T08:00:00+01:00', '2025-12-06T16:30:00+01:00'),
 
-         -- 8. British Airways: Warszawa (WAW) -> Londyn (LHR) -> (Na BA 269 do LAX)
-         ('BA', 'G-VIIA', 'WAW', 'LHR', 'BA 847', '2025-12-10 12:00:00 +01:00', '2025-12-10 13:40:00 +00:00'),
+        ('FR', 'SP-RZA', 'BZG', 'WRO', 'FR9012', '2025-12-06T07:15:00+01:00', '2025-12-06T08:00:00+01:00'),
 
-         -- 9. Emirates: Warszawa (WAW) -> Dubaj (DXB) -> (Na EK 354 do SIN)
-         ('EK', 'A6-EGV', 'WAW', 'DXB', 'EK 180', '2025-12-06 15:00:00 +01:00', '2025-12-06 23:45:00 +04:00'),
+        ('LO', 'SP-LND', 'BZG', 'WAW', 'LO3987', '2025-12-06T10:30:00+01:00', '2025-12-06T11:20:00+01:00'),
 
+        ('LO', 'SP-LSC', 'BZG', 'JFK', 'LO011', '2025-12-06T11:00:00+01:00', '2025-12-06T20:30:00+01:00'),
 
-         -- == GRUPA 3: EUROPEJSKIE POINT-TO-POINT (Środek tygodnia) ==
+        ('BA', 'G-VIIA', 'BZG', 'LHR', 'BA850', '2025-12-06T12:00:00+01:00', '2025-12-06T14:15:00+01:00'),
 
-         -- 10. Ryanair: Kraków (KRK) -> Londyn (LHR)
-         ('FR', 'SP-RSQ', 'KRK', 'LHR', 'FR 2451', '2025-12-06 06:00:00 +01:00', '2025-12-06 07:35:00 +00:00'),
+        ('LO', 'SP-LRH', 'BZG', 'ORD', 'LO005', '2025-12-06T13:00:00+01:00', '2025-12-06T23:00:00+01:00'),
 
-         -- 11. Wizz Air: Gdańsk (GDN) -> Rzym (FCO)
-         ('W6', 'HA-LVC', 'GDN', 'FCO', 'W6 1651', '2025-12-07 18:00:00 +01:00', '2025-12-07 20:30:00 +01:00'),
+        ('LH', 'D-ABYA', 'BZG', 'FRA', 'LH1389', '2025-12-06T14:30:00+01:00', '2025-12-06T16:15:00+01:00'),
 
-         -- 12. Air France: Warszawa (WAW) -> Paryż (CDG)
-         ('AF', 'F-HTYA', 'WAW', 'CDG', 'AF 1247', '2025-12-09 07:00:00 +01:00', '2025-12-09 09:20:00 +01:00'),
+        ('KL', 'PH-BVA', 'BZG', 'AMS', 'KL1996', '2025-12-06T16:00:00+01:00', '2025-12-06T17:45:00+01:00'),
 
-         -- 13. KLM: Amsterdam (AMS) -> Kraków (KRK)
-         ('KL', 'PH-BVA', 'AMS', 'KRK', 'KL 1995', '2025-12-11 14:00:00 +01:00', '2025-12-11 15:55:00 +01:00'),
+        ('LO', 'SP-LSC', 'BZG', 'NRT', 'LO085', '2025-12-06T17:50:00+01:00', '2025-12-07T09:00:00+01:00'),
 
-         -- 14. Lufthansa: Rzym (FCO) -> Frankfurt (FRA) (Dolot na LH 430)
-         ('LH', 'D-AINZ', 'FCO', 'FRA', 'LH 233', '2025-12-08 07:00:00 +01:00', '2025-12-08 09:00:00 +01:00'),
+        ('SQ', '9V-SGB', 'BZG', 'SIN', 'SQ303', '2025-12-06T20:00:00+01:00', '2025-12-07T12:00:00+01:00'),
 
+        ('LO', 'SP-LRH', 'BZG', 'LAX', 'LO023', '2025-12-07T09:00:00+01:00', '2025-12-07T21:00:00+01:00'),
 
-         -- == GRUPA 4: LOTY KRAJOWE (Powroty / Biznes) ==
+        ('LH', 'D-AINZ', 'FRA', 'FCO', 'LH240', '2025-12-05T13:30:00+01:00', '2025-12-05T15:20:00+01:00'),
 
-         ('LO', 'SP-LMA', 'WAW', 'WRO', 'LO 3855', '2025-12-12 16:30:00 +01:00', '2025-12-12 17:25:00 +01:00'),
-         ('LO', 'SP-LMA', 'WRO', 'WAW', 'LO 3856', '2025-12-12 18:05:00 +01:00', '2025-12-12 19:00:00 +01:00'),
-         ('FR', 'SP-RZA', 'GDN', 'KRK', 'FR 6722', '2025-12-13 20:00:00 +01:00', '2025-12-13 21:10:00 +01:00'),
+        ('LO', 'SP-LVD', 'WAW', 'CDG', 'LO331', '2025-12-05T08:15:00+01:00', '2025-12-05T10:40:00+01:00'),
 
+        ('BA', 'G-VIIA', 'LHR', 'JFK', 'BA179', '2025-12-05T18:30:00+01:00', '2025-12-06T02:00:00+01:00'),
 
-         -- == GRUPA 5: USA DOMESTIC (Święta Bożego Narodzenia - późniejszy termin) ==
+        ('KL', 'PH-BVA', 'AMS', 'SIN', 'KL835', '2025-12-05T21:00:00+01:00', '2025-12-06T13:00:00+01:00'),
 
-         ('UA', 'N14011', 'JFK', 'LAX', 'UA 567', '2025-12-20 08:00:00 -05:00', '2025-12-20 11:30:00 -08:00'),
-         ('DL', 'N123DL', 'LAX', 'JFK', 'DL 421', '2025-12-20 14:00:00 -08:00', '2025-12-20 22:30:00 -05:00'),
-         ('AA', 'N717AN', 'ORD', 'LAX', 'AA 112', '2025-12-21 09:00:00 -06:00', '2025-12-21 11:30:00 -08:00') -- Chicago CST -6
+        ('LO', 'SP-LRH', 'WAW', 'LAX', 'LO024', '2025-12-06T13:00:00+01:00', '2025-12-07T01:35:00+01:00'),
 
+        ('BA', 'G-VIIA', 'LHR', 'SIN', 'BA011', '2025-12-06T16:00:00+01:00', '2025-12-07T10:30:00+01:00'),
+
+        ('LH', 'D-ABYA', 'FRA', 'JFK', 'LH404', '2025-12-06T17:30:00+01:00', '2025-12-06T20:20:00+01:00'),
+
+        ('KL', 'PH-BVA', 'AMS', 'ORD', 'KL611', '2025-12-06T19:15:00+01:00', '2025-12-06T21:45:00+01:00'),
+
+        ('LO', 'SP-LSC', 'WAW', 'NRT', 'LO079', '2025-12-05T22:50:00+01:00', '2025-12-06T18:30:00+01:00'),
+
+        -- TRASA 1: BZG -> WAW -> SIN -> NRT
+        -- Etap 1: BZG -> WAW (Start trasy)
+        ('LO', 'SP-LND', 'BZG', 'WAW', 'LO4001', '2025-12-08T06:00:00+01:00', '2025-12-08T06:50:00+01:00'),
+        -- Etap 2: WAW -> SIN (Środek trasy - przesiadka w WAW)
+        ('LO', 'SP-LSC', 'WAW', 'SIN', 'LO099',  '2025-12-08T09:00:00+01:00', '2025-12-09T04:00:00+01:00'),
+        -- Etap 3: SIN -> NRT (Koniec trasy - przesiadka w SIN)
+        ('SQ', '9V-SGB', 'SIN', 'NRT', 'SQ638',  '2025-12-09T07:00:00+01:00', '2025-12-09T15:00:00+01:00'),
+
+        -- TRASA 2: BZG -> FRA -> JFK -> LAX
+        -- Etap 1: BZG -> FRA (Start trasy)
+        ('LH', 'D-AINZ', 'BZG', 'FRA', 'LH9001', '2025-12-08T10:00:00+01:00', '2025-12-08T11:45:00+01:00'),
+        -- Etap 2: FRA -> JFK (Środek trasy - przesiadka we FRA)
+        ('LH', 'D-ABYA', 'FRA', 'JFK', 'LH400',  '2025-12-08T14:00:00+01:00', '2025-12-08T17:00:00+01:00'),
+        -- Etap 3: JFK -> LAX (Koniec trasy - przesiadka w JFK)
+        ('LO', 'SP-LRH', 'JFK', 'LAX', 'LO025',  '2025-12-08T20:00:00+01:00', '2025-12-08T23:30:00+01:00')
     ) AS f(airline, plane, dep_code, arr_code, num, dep_t, arr_t)
-
         JOIN airlines al ON al.code = f.airline
         JOIN planes pl ON pl.tail_number = f.plane
         JOIN airports dep ON dep.code = f.dep_code
@@ -340,39 +347,76 @@ FROM
         OUTER APPLY (SELECT TOP 1 g.id FROM gates g JOIN terminals t ON g.terminal_id = t.id WHERE t.airport_id = arr.id) arr_g;
 GO
 
-
--- ==========================================
--- KROK 2: Ustawianie przesiadek (Connecting Flights)
--- ==========================================
-
--- 1. Gdańsk -> Warszawa -> Nowy Jork (NOWA GŁÓWNA TRASA)
+-- 1. BZG -> FRA (LH1383) łączymy z FRA -> FCO (LH240)
 UPDATE flights
-SET connecting_flight_id = (SELECT id FROM flights WHERE number = 'LO 26')
-WHERE number = 'LO 3836';
+SET connecting_flight_id = (SELECT id FROM flights WHERE number = 'LH240')
+WHERE number = 'LH1383';
 
--- 2. Kraków -> Warszawa -> Nowy Jork
+-- 2. BZG -> WAW (LO3991) łączymy z WAW -> CDG (LO331)
 UPDATE flights
-SET connecting_flight_id = (SELECT id FROM flights WHERE number = 'LO 26')
-WHERE number = 'LO 3904';
+SET connecting_flight_id = (SELECT id FROM flights WHERE number = 'LO331')
+WHERE number = 'LO3991';
 
--- 3. Warszawa -> Londyn -> Los Angeles
+-- 3. BZG -> LHR (FR2468) łączymy z LHR -> JFK (BA179)
 UPDATE flights
-SET connecting_flight_id = (SELECT id FROM flights WHERE number = 'BA 269')
-WHERE number = 'BA 847';
+SET connecting_flight_id = (SELECT id FROM flights WHERE number = 'BA179')
+WHERE number = 'FR2468';
 
--- 4. Warszawa -> Dubaj -> Singapur
+-- 4. BZG -> AMS (KL1992) łączymy z AMS -> SIN (KL835)
 UPDATE flights
-SET connecting_flight_id = (SELECT id FROM flights WHERE number = 'EK 354')
-WHERE number = 'EK 180';
+SET connecting_flight_id = (SELECT id FROM flights WHERE number = 'KL835')
+WHERE number = 'KL1992';
+GO
 
--- 5. Rzym -> Frankfurt -> Chicago
+-- 5. BZG -> WAW (LO3987) łączymy z WAW -> LAX (LO024)
 UPDATE flights
-SET connecting_flight_id = (SELECT id FROM flights WHERE number = 'LH 430')
-WHERE number = 'LH 233';
+SET connecting_flight_id = (SELECT id FROM flights WHERE number = 'LO024')
+WHERE number = 'LO3987';
 
--- 6. Dubaj -> Singapur -> Tokio
+-- 6. BZG -> LHR (BA850) łączymy z LHR -> SIN (BA011)
 UPDATE flights
-SET connecting_flight_id = (SELECT id FROM flights WHERE number = 'SQ 638')
-WHERE number = 'EK 354';
+SET connecting_flight_id = (SELECT id FROM flights WHERE number = 'BA011')
+WHERE number = 'BA850';
 
+-- 7. BZG -> FRA (LH1389) łączymy z FRA -> JFK (LH404)
+UPDATE flights
+SET connecting_flight_id = (SELECT id FROM flights WHERE number = 'LH404')
+WHERE number = 'LH1389';
+
+-- 8. BZG -> AMS (KL1996) łączymy z AMS -> ORD (KL611)
+UPDATE flights
+SET connecting_flight_id = (SELECT id FROM flights WHERE number = 'KL611')
+WHERE number = 'KL1996';
+
+-- 9. BZG -> WAW (LO3995) łączymy z WAW -> NRT (LO079)
+-- Uwaga: LO3995 był w Twoim skrypcie jako lot z dn. 05.12 o 18:50
+UPDATE flights
+SET connecting_flight_id = (SELECT id FROM flights WHERE number = 'LO079')
+WHERE number = 'LO3995';
+GO
+
+
+
+-- 1. TRASA AZJATYCKA: BZG -> WAW -> SIN -> NRT
+-- Krok A: Łączymy BZG->WAW z WAW->SIN
+UPDATE flights
+SET connecting_flight_id = (SELECT id FROM flights WHERE number = 'LO099')
+WHERE number = 'LO4001';
+
+-- Krok B: Łączymy WAW->SIN z SIN->NRT
+UPDATE flights
+SET connecting_flight_id = (SELECT id FROM flights WHERE number = 'SQ638')
+WHERE number = 'LO099';
+
+
+-- 2. TRASA TRANSATLANTYCKA: BZG -> FRA -> JFK -> LAX
+-- Krok A: Łączymy BZG->FRA z FRA->JFK
+UPDATE flights
+SET connecting_flight_id = (SELECT id FROM flights WHERE number = 'LH400')
+WHERE number = 'LH9001';
+
+-- Krok B: Łączymy FRA->JFK z JFK->LAX
+UPDATE flights
+SET connecting_flight_id = (SELECT id FROM flights WHERE number = 'LO025')
+WHERE number = 'LH400';
 GO

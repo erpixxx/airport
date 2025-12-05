@@ -7,8 +7,15 @@ import {
   Text,
 } from "@radix-ui/themes";
 import { ExitIcon } from "@radix-ui/react-icons";
+import { useNavigate } from "react-router-dom";
 
 export function NavigationBar() {
+  const navigate = useNavigate();
+
+  const logout = () => {
+    navigate("/");
+  };
+
   return (
     <Flex align="center" justify="between">
       <Heading size="8" style={{ color: "var(--accent-11)" }}>
@@ -22,7 +29,7 @@ export function NavigationBar() {
           </Button>
         </DropdownMenu.Trigger>
         <DropdownMenu.Content color="gray">
-          <DropdownMenu.Item color="red">
+          <DropdownMenu.Item color="red" onClick={logout}>
             <ExitIcon />
             <Text>Logout</Text>
           </DropdownMenu.Item>

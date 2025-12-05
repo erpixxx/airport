@@ -9,6 +9,8 @@ export function ReservationsCard() {
         direction="column"
         justify="center"
         minHeight="100px"
+        gap="2"
+        my="2"
       >
         <Text size="2" color="gray">
           Brak nadchodzących rezerwacji.
