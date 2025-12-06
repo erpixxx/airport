@@ -1,17 +1,27 @@
 --
 -- Sample users
 --
-INSERT INTO [users] ([name], [email], [password_hash], [created_at])
+SET IDENTITY_INSERT [users] ON;
+INSERT INTO [users] ([id], [name], [email], [password_hash], [created_at])
 VALUES
-    (N'Jan Kowalski', 'jan.kowalski@poczta.pl', '123123aa', '2025-01-02T09:15:00+01:00'),
-    (N'Anna Nowak', 'anna.nowak@firma.com', '123123aa', '2025-01-03T14:30:00+01:00'),
-    (N'Piotr Wiśniewski', 'piotr.wisniewski@web.pl', '123123aa', '2025-01-05T10:45:00+01:00'),
-    (N'Katarzyna Wójcik', 'kasia.wojcik@domena.pl', '123123aa', '2025-01-08T18:20:00+01:00'),
-    (N'Tomasz Kamiński', 'tomek.kaminski@serwer.pl', '123123aa', '2025-01-12T11:05:00+01:00'),
-    (N'Małgorzata Lewandowska', 'm.lewandowska@biuro.pl', '123123aa', '2025-01-15T16:50:00+01:00'),
-    (N'Michał Zieliński', 'michal.zielinski@tech.pl', '123123aa', '2025-01-18T08:10:00+01:00'),
-    (N'Agnieszka Szymańska', 'aga.szymanska@poczta.fm', '123123aa', '2025-01-20T20:30:00+01:00');
+    (1, N'Jan Kowalski', 'jan.kowalski@poczta.pl', '123123aa', '2025-01-02T09:15:00+01:00'),
+    (2, N'Anna Nowak', 'anna.nowak@firma.com', '123123aa', '2025-01-03T14:30:00+01:00'),
+    (3, N'Piotr Wiśniewski', 'piotr.wisniewski@web.pl', '123123aa', '2025-01-05T10:45:00+01:00'),
+    (4, N'Katarzyna Wójcik', 'kasia.wojcik@domena.pl', '123123aa', '2025-01-08T18:20:00+01:00'),
+    (5, N'Tomasz Kamiński', 'tomek.kaminski@serwer.pl', '123123aa', '2025-01-12T11:05:00+01:00'),
+    (6, N'Małgorzata Lewandowska', 'm.lewandowska@biuro.pl', '123123aa', '2025-01-15T16:50:00+01:00'),
+    (7, N'Michał Zieliński', 'michal.zielinski@tech.pl', '123123aa', '2025-01-18T08:10:00+01:00'),
+    (8, N'Agnieszka Szymańska', 'aga.szymanska@poczta.fm', '123123aa', '2025-01-20T20:30:00+01:00'),
+    (9, N'Oskar Keczmorski', 'firemi6233@idwage.com', '123123aa', '2025-01-20T20:10:00+01:00'),
+    (10, N'Kamil Steinbach', 'wqertyu@interia.com', '123123aa', '2025-03-20T10:10:00+01:00'),
+    (11, N'Magdalena Wójcik', 'magda.wojcik@onet.pl', '123123aa', '2025-03-22T09:30:00+01:00'),
+    (12, N'Dariusz Mazur', 'd.mazur@firma.pl', '123123aa', '2025-03-25T14:15:00+01:00'),
+    (13, N'Elżbieta Kaczmarek', 'ela.kaczmarek@dom.pl', '123123aa', '2025-03-28T08:45:00+01:00'),
+    (14, N'Patryk Jasiński', 'patryk.j@tech.com', '123123aa', '2025-03-31T19:20:00+02:00'),
+    (15, N'Zofia Król', 'zofia.krol@szkola.edu.pl', '123123aa', '2025-04-02T11:10:00+02:00');
+SET IDENTITY_INSERT [users] OFF;
 GO
+
 
 --
 -- Sample passengers
@@ -26,7 +36,15 @@ VALUES
     (5, N'Tomasz', N'Kamiński', '1978-07-30', 'TK445566'),
     (7, N'Michał', N'Zieliński', '1983-09-19', 'MZ778899'),
     (7, N'Jan', N'Zieliński', '2015-06-01', 'JZ000111'),
-    (8, N'Agnieszka', N'Szymańska', '1995-12-24', 'AS554433');
+    (8, N'Agnieszka', N'Szymańska', '1995-12-24', 'AS554433'),
+    (9, N'Piotr', N'Wiśniewski', '1982-04-12', 'PW482910'),
+    (10, N'Maria', N'Lewandowska', '1991-09-22', 'ML739102'),
+    (10, N'Krzysztof', N'Lewandowski', '1989-01-15', 'KL284711'),
+    (11, N'Julia', N'Dąbrowska', '1995-05-30', 'JD847291'),
+    (12, N'Paweł', N'Kozłowski', '1975-11-08', 'PK394821'),
+    (12, N'Małgorzata', N'Kozłowska', '1978-03-25', 'MK928374'),
+    (12, N'Oliwier', N'Kozłowski', '2012-07-14', 'OK112233');
+
 GO
 
 --
@@ -113,17 +131,21 @@ GO
 INSERT INTO [airlines] ([name], [code])
 VALUES
     (N'Polskie Linie Lotnicze LOT', 'LO'),
-    (N'Lufthansa', 'LH'),            -- Hub: Frankfurt (FRA)
-    (N'British Airways', 'BA'),      -- Hub: Londyn (LHR)
-    (N'Air France', 'AF'),           -- Hub: Paryż (CDG)
-    (N'KLM Royal Dutch Airlines', 'KL'), -- Hub: Amsterdam (AMS)
+    (N'Lufthansa', 'LH'),
+    (N'British Airways', 'BA'),
+    (N'Air France', 'AF'),
+    (N'KLM Royal Dutch Airlines', 'KL'),
     (N'Ryanair', 'FR'),
     (N'Wizz Air', 'W6'),
-    (N'Emirates', 'EK'),             -- Hub: Dubaj (DXB)
-    (N'Singapore Airlines', 'SQ'),   -- Hub: Singapur (SIN)
-    (N'Delta Air Lines', 'DL'),      -- Hub: JFK, LAX
-    (N'United Airlines', 'UA'),      -- Hub: Chicago (ORD)
-    (N'American Airlines', 'AA');    -- Hub: Chicago (ORD), LAX
+    (N'Emirates', 'EK'),
+    (N'Singapore Airlines', 'SQ'),
+    (N'Delta Air Lines', 'DL'),
+    (N'United Airlines', 'UA'),
+    (N'American Airlines', 'AA'),
+    (N'Uganda Airlines', 'UR'),
+    (N'Kazakhstan Airlines', 'KC'),
+    (N'Kulula Airlines', 'KZ'),
+    (N'Casino Express Airlines', 'CE');
 GO
 
 --
@@ -419,4 +441,119 @@ WHERE number = 'LH9001';
 UPDATE flights
 SET connecting_flight_id = (SELECT id FROM flights WHERE number = 'LO025')
 WHERE number = 'LH400';
+GO
+
+
+
+INSERT INTO [tickets] ([flight_id], [passenger_id], [seat_id], [code], [booked_at])
+SELECT
+    f.id,
+    p.id,
+    s.id,
+    -- Generujemy unikalny kod biletu: TKT-[Lot]-[Miejsce]
+    N'TKT-' + f.number + N'-' + s.number,
+    DATEADD(day, -30, f.departure)
+FROM
+    (VALUES
+         -- Pasażer (Paszport),  Nr Lotu,  Nr Miejsca
+         ('JK123456', 'LO3991', '1A'),   -- Jan K. (Biznes do W-wy)
+         ('EK654321', 'LO3991', '1B'),   -- Ewa K. (Biznes do W-wy)
+         ('AN987654', 'LH1383', '5A'),   -- Anna N. (Eco do Frankfurtu)
+         ('KW112233', 'FR2468', '10A'),  -- Kasia W. (Tani lot do Londynu)
+         ('MJ332211', 'FR2468', '10B'),  -- Marek J. (Tani lot do Londynu)
+         ('TK445566', 'W61155', '3A'),   -- Tomasz K. (Rzym)
+         ('MZ778899', 'LO3501', '12C'),  -- Michał Z. (Kraków)
+         ('JZ000111', 'LO3501', '12D'),  -- Jan Z. (Dziecko, Kraków)
+         ('AS554433', 'KL1992', '2A'),   -- Agnieszka S. (Biznes do Amsterdamu)
+         ('PW482910', 'W62234', '15F'),  -- Piotr W. (Paryż)
+         ('ML739102', 'EK9999', '30A'),  -- Maria L. (Dubaj - A380/777)
+         ('KL284711', 'EK9999', '30B'),  -- Krzysztof L. (Dubaj)
+         ('JD847291', 'LO011',  '40A'),  -- Julia D. (USA - Dreamliner)
+         ('PK394821', 'LO011',  '40B'),  -- Paweł K. (USA)
+         ('MK928374', 'LO011',  '40C')   -- Małgorzata K. (USA)
+    ) AS d(passport, flight_num, seat_num)
+        JOIN [passengers] p ON p.passport_number = d.passport
+        JOIN [flights] f ON f.number = d.flight_num
+        JOIN [seats] s ON s.number = d.seat_num AND s.plane_id = f.plane_id;
+GO
+
+
+
+-- =============================================
+-- 1. Bagaż Standardowy (15 sztuk)
+-- =============================================
+DECLARE @StandardBaggageIds TABLE (id INT);
+
+-- Wstawiamy do tabeli głównej i przechwytujemy ID
+INSERT INTO [baggage] ([ticket_id], [tag], [weight], [baggage_type])
+OUTPUT inserted.id INTO @StandardBaggageIds
+SELECT TOP 15
+    t.id,
+    N'TAG-STD-' + CAST(t.id AS nvarchar(20)) + N'-' + LEFT(NEWID(), 4), -- Unikalny TAG
+    20.00,
+    'Standard'
+FROM [tickets] t
+ORDER BY t.id; -- Bierzemy 15 pierwszych biletów
+
+-- Uzupełniamy tabelę szczegółową
+INSERT INTO [baggage_standard] ([baggage_id], [dimensions_cm])
+SELECT id, '55x40x23' -- Standardowa walizka kabinowa
+FROM @StandardBaggageIds;
+GO
+
+-- =============================================
+-- 2. Bagaż Ubezpieczony (15 sztuk)
+-- =============================================
+DECLARE @InsuredBaggageIds TABLE (id INT);
+
+INSERT INTO [baggage] ([ticket_id], [tag], [weight], [baggage_type])
+OUTPUT inserted.id INTO @InsuredBaggageIds
+SELECT TOP 15
+    t.id,
+    N'TAG-INS-' + CAST(t.id AS nvarchar(20)) + N'-' + LEFT(NEWID(), 4),
+    25.50,
+    'Insured'
+FROM [tickets] t
+ORDER BY t.id DESC; -- Bierzemy bilety od końca, dla urozmaicenia
+
+-- Uzupełniamy tabelę szczegółową (różne kwoty ubezpieczenia w zależności od ID)
+INSERT INTO [baggage_insured] ([baggage_id], [insurance_amount], [policy_number])
+SELECT
+    id,
+    CASE WHEN id % 2 = 0 THEN 5000.00 ELSE 10000.00 END, -- Kwota ubezpieczenia
+    N'POL-' + CAST(id AS nvarchar(20)) + N'-AXA'
+FROM @InsuredBaggageIds;
+GO
+
+-- =============================================
+-- 3. Bagaż Specjalny (15 sztuk)
+-- =============================================
+DECLARE @SpecialBaggageIds TABLE (id INT);
+
+INSERT INTO [baggage] ([ticket_id], [tag], [weight], [baggage_type])
+OUTPUT inserted.id INTO @SpecialBaggageIds
+SELECT TOP 15
+    t.id,
+    N'TAG-SPC-' + CAST(t.id AS nvarchar(20)) + N'-' + LEFT(NEWID(), 4),
+    30.00,
+    'Special'
+FROM [tickets] t
+ORDER BY NEWID(); -- Losowe bilety
+
+-- Uzupełniamy tabelę szczegółową (losujemy typ sprzętu)
+INSERT INTO [baggage_special] ([baggage_id], [category], [handling_instructions], [is_fragile])
+SELECT
+    id,
+    CASE (id % 3)
+        WHEN 0 THEN 'Sports Equipment'
+        WHEN 1 THEN 'Musical Instrument'
+        ELSE 'Medical Device'
+        END,
+    CASE (id % 3)
+        WHEN 0 THEN N'Narty - ostrożnie przy załadunku'
+        WHEN 1 THEN N'Gitara - nie kłaść innych bagaży na wierzch'
+        ELSE N'Wózek inwalidzki - dostarczyć pod drzwi samolotu'
+        END,
+    1 -- Wszystkie specjalne oznaczamy jako delikatne
+FROM @SpecialBaggageIds;
 GO
